@@ -33,21 +33,40 @@ class Solution {
         // }
         // return nums.length;
 
+        // solution 3  -> TC: O(n) SC:o(1)
         // xor approach 
+
+        // int n = nums.length;
+
+        // int ans = 0;
+
+        // for(int i = 1 ; i <= n ; i++){
+        //     ans = ans ^ i;  // 0 ^ 1 ^ 2 ^ 3
+        // }
+        // for(int i = 0 ; i < n ; i++){
+        //     // 0 ^ 1 ^ 2 ^ 3
+        //     // 0 ^ 1 ^ 2 ^ 3 ^ 3 -> 0 ^ 1 ^ 2 ^ 0 -> 1 ^ 2 ^ 1 -> 2 = ans
+        //     ans = ans ^ nums[i];  
+        // }
+        // return ans; 
+        
+
+        // solution 4 -> TC: O(n) SC:o(1)
+
+        // expected sum - actual sum approach
+
+        int expectedSum = 0;
+        int actualSum = 0;
+        for(int num : nums){
+            actualSum += num;
+        }
 
         int n = nums.length;
 
-        int ans = 0;
+        expectedSum = (n*(n + 1))/2;
 
-        for(int i = 1 ; i <= n ; i++){
-            ans = ans ^ i;  // 0 ^ 1 ^ 2 ^ 3
-        }
-        for(int i = 0 ; i < n ; i++){
-            // 0 ^ 1 ^ 2 ^ 3
-            // 0 ^ 1 ^ 2 ^ 3 ^ 3 -> 0 ^ 1 ^ 2 ^ 0 -> 1 ^ 2 ^ 1 -> 2 = ans
-            ans = ans ^ nums[i];  
-        }
-        return ans; 
+        int ans = expectedSum - actualSum;
 
+        return ans;
     }
 }
