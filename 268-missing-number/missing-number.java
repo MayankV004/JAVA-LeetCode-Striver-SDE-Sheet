@@ -19,20 +19,35 @@ class Solution {
         
         // solution 2
 
-        int count[] = new int[nums.length];
-        for (int i = 0 ; i < nums.length; i++)
-        {
-            if(nums[i] < nums.length)
-            {
-                count[nums[i]] = 1;
-            }
-        }
-        for(int i = 0 ; i < nums.length ; i++)
-        {
-            if (count[i] == 0) return i;
-        }
-        return nums.length;
+        // int count[] = new int[nums.length];
+        // for (int i = 0 ; i < nums.length; i++)
+        // {
+        //     if(nums[i] < nums.length)
+        //     {
+        //         count[nums[i]] = 1;
+        //     }
+        // }
+        // for(int i = 0 ; i < nums.length ; i++)
+        // {
+        //     if (count[i] == 0) return i;
+        // }
+        // return nums.length;
 
+        // xor approach 
+
+        int n = nums.length;
+
+        int ans = 0;
+
+        for(int i = 1 ; i <= n ; i++){
+            ans = ans ^ i;  // 0 ^ 1 ^ 2 ^ 3
+        }
+        for(int i = 0 ; i < n ; i++){
+            // 0 ^ 1 ^ 2 ^ 3
+            // 0 ^ 1 ^ 2 ^ 3 ^ 3 -> 0 ^ 1 ^ 2 ^ 0 -> 1 ^ 2 ^ 1 -> 2 = ans
+            ans = ans ^ nums[i];  
+        }
+        return ans; 
 
     }
 }
