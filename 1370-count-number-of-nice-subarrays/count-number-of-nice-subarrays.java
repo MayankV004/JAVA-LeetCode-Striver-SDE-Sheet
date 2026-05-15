@@ -1,5 +1,6 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
+        // convert odd -> 1 ; even -> 0
         int n = nums.length;
         for(int i = 0 ; i < n ; i++){
             if(nums[i] % 2 == 0){
@@ -8,6 +9,8 @@ class Solution {
                 nums[i] = 1;
             }
         }
+
+        // apply subarray sum = k;
 
         Map<Integer , Integer> map = new HashMap<>();
 
