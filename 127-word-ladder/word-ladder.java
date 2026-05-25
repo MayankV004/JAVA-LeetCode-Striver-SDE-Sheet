@@ -15,7 +15,7 @@ class Solution {
             return 0;
         }
 
-        Queue<Pair> q = new LinkedList<>();
+        Queue<Pair> q = new ArrayDeque<>();
         q.add(new Pair(beginWord , 1));
         while(!q.isEmpty()){
             String s = q.peek().word;
