@@ -26,7 +26,11 @@ class Solution {
             }
             
             for(int i = 0 ; i < s.length() ; i++){
+                char originalChar = s.charAt(i);
                 for(char j = 'a' ; j <= 'z' ; j++){
+                    
+                    if(j == originalChar) continue; // slight optimization 
+
                     StringBuilder sb = new StringBuilder(s);
                     sb.setCharAt(i , j);
                     String newWord = sb.toString();
