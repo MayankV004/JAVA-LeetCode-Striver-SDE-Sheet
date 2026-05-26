@@ -11,7 +11,9 @@ class Solution {
         visited[start] = 1;
         while(!q.isEmpty()){
             int idx = q.poll();
+
             if(arr[idx] == 0) return true;
+            
             int posIdx = idx + arr[idx];
             int negIdx = idx - arr[idx];
 
