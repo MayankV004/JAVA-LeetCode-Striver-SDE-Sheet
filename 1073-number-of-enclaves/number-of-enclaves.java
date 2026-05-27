@@ -1,10 +1,11 @@
 class Solution {
     public  void dfs(int[][] grid , int i , int j , int[][] visited , int m , int n){
+        // Base Case
         if( i < 0 || j < 0 || i >= m || j >= n || visited[i][j] == 1 || grid[i][j] == 0){
             return ;
-        }
-        visited[i][j] = 1;
-        grid[i][j] = 0;
+        }        
+        visited[i][j] = 1; // marking visited
+        grid[i][j] = 0;    // making the boundary 1s to 0 
 
         dfs(grid , i , j+1 , visited , m , n );
         dfs(grid , i , j-1 , visited , m , n );
@@ -29,6 +30,7 @@ class Solution {
 
         // now as well boundary land and its touching part became water , now we are only left with 
         // land surrounded by water and not touching the boundary
+        //so we will just count all 1s now 
         int ans = 0 ;
         for (int i = 0 ; i < m ; i++){
             for(int j = 0 ; j < n ; j++){
@@ -37,8 +39,7 @@ class Solution {
                 }
             }
         }
-
-        return ans ;
         
+        return ans ;
     }
 }
