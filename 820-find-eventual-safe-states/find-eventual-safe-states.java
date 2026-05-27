@@ -1,46 +1,44 @@
 class Solution {
-    public boolean dfsCheck(int node , List<List<Integer>> adj , int[]visited , int[]pathVisited){
-        visited[node] = 1;
-        pathVisited[node] = 1;
 
-        for(int it : adj.get(node)){
-            if(visited[it] == 0){
-                if(dfsCheck(it , adj , visited , pathVisited) == false) return false;
-            }else if(pathVisited[it] == 1) return false;
+    public boolean dfs(int [][]graph , int currNode , int[]state){
+        if(state[currNode] == 1){ 
+            // means there is cycle so not safe
+            return false; 
         }
-        pathVisited[node] = 0;
+        if(state[currNode] == 2){
+            // it is a safe node 
+            return true;
+        }
+
+        // in starting we make the node unsafe
+        state[currNode] = 1;
+
+        for(int neighbor : graph[currNode]){
+            if(!dfs(graph , neighbor, state)){
+                return false;
+            }
+        }
+        state[currNode] = 2; // marking it safe on backtracking 
+        // as we have found a terminal node 
+
         return true;
+
     }
 
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        int V = graph.length;
-        int visited[] = new int[V]; 
-        int pathVisited[] = new int[V];
-        List<Integer> ans = new ArrayList<>();
-        
-        List<List<Integer>> adj = new ArrayList<>();
+        int n = graph.length;
+        int state[] = new int[n]; // keeping the track of states 
+        // state = 0 -> unvisited
+        // state = 1 -> visited and not safe
+        // state = 2 -> safe
 
-        for(int i = 0 ; i < V ; i++){
-            adj.add(new ArrayList<>());
-        }
-        for(int i = 0 ; i < V ; i++){
-            for(int it : graph[i]){
-                adj.get(i).add(it);
+        List<Integer> safeNodes = new ArrayList<>();
+
+        for(int i = 0 ; i < n ; i++){
+            if(dfs(graph , i , state)){
+                safeNodes.add(i);
             }
         }
-
-        for(int i = 0 ; i < V ; i++){
-            if(visited[i] == 0){
-                dfsCheck(i , adj , visited , pathVisited);
-            }
-        }
-
-        for(int i = 0 ; i < V ; i++){
-            if(pathVisited[i] == 0){
-                ans.add(i);
-            }
-        }
-
-        return ans;
+        return safeNodes;
     }
 }
