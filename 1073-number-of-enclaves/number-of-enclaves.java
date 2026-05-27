@@ -34,12 +34,10 @@ class Solution {
         int ans = 0 ;
         for (int i = 0 ; i < m ; i++){
             for(int j = 0 ; j < n ; j++){
-                if(grid[i][j] == 1){
-                   ans ++ ;
-                }
+                ans += grid[i][j] ; // as only 1s are left to we can just directly add all cells
             }
         }
-        
+
         return ans ;
     }
 }
