@@ -1,179 +1,116 @@
-// TC: O (color^2 * m * n)
-// class Solution {
-
-//     public int[] findBoundary(int color , int [][]grid){
-//         int minRow = grid.length + 1;
-//         int maxRow = -1 ;
-//         int minCol = grid[0].length +1 ;
-//         int maxCol = -1;
-
-//         for(int i = 0 ; i < grid.length ; i++){
-//             for(int j = 0 ; j < grid[0].length ; j++){
-//                 if(grid[i][j] == color){
-//                     minRow = Math.min(minRow , i);
-//                     maxRow = Math.max(maxRow , i);
-
-//                     minCol = Math.min(minCol , j);
-//                     maxCol = Math.max(maxCol , j);
-//                 }
-//             }
-//         }
-
-//         return new int[]{minRow , maxRow , minCol , maxCol};
-//     }
-
-//     public boolean otherColorInBoundary(int color , int[] boundary , int[][] grid ){
-//         int minRow = boundary[0];
-//         int maxRow = boundary[1];
-//         int minCol = boundary[2];
-//         int maxCol = boundary[3];
-
-//         for(int i = minRow ; i <= maxRow ; i++){
-//             for(int j = minCol ; j <= maxCol ; j++){
-//                 if(grid[i][j] == color){
-//                     return true;
-//                 }
-//             }
-//         }
-
-//         return false;
-
-//     }
-
-
-//     public boolean isPrintable(int[][] targetGrid) {
-//         Set<Integer> set = new HashSet<>();
-//         List<Set<Integer>> graph = new ArrayList<>();
-
-//         int m = targetGrid.length;
-//         int n = targetGrid[0].length;
-
-//         int maxColor = 0;
-//         for(int i = 0 ; i < m ; i++){
-//             for(int j = 0 ; j < n ; j++){
-//                 set.add(targetGrid[i][j]);
-//                 maxColor = Math.max(maxColor , targetGrid[i][j]);
-//             }
-//         }
-
-//         maxColor = maxColor + 1; // for 1-indexed array
-
-//         int indegree[] = new int[maxColor];
-
-//         for(int i = 0 ; i < maxColor ; i++){
-//             graph.add(new HashSet<>());
-//             indegree[i] = -1 ; // setting -1 for not real colors
-//         }
-
-//         for(int color : set ){
-//             indegree[color] = 0; // setting 0 for real actual colors
-//         }
-
-//         // building Graph
-//         for(int color : set){
-//             // getting the boundary points for the particular color
-//             int boundary[] = findBoundary(color , targetGrid);
-
-//             for(int otherColor : set ){
-//                 if((otherColor != color) && otherColorInBoundary(otherColor , boundary , targetGrid)){
-//                     if(!graph.get(color).contains(otherColor)){
-//                         graph.get(color).add(otherColor);
-//                         indegree[otherColor]++;
-//                     }
-//                 }
-//             }
-
-//         }
-
-//         // now BFS using kahns algo
-
-//         Queue<Integer> q = new ArrayDeque<>();
-
-//         // added starting points in the queue
-//         for(int i = 0 ; i < maxColor ; i++){
-//             if(indegree[i] == 0){
-//                 q.offer(i);
-//             }
-//         }
-
-//         int processed = 0;
-
-//         while(!q.isEmpty()){
-//             int node = q.poll();
-//             processed ++;
-
-//             for(int neighbor : graph.get(node)){
-//                 if(--indegree[neighbor] == 0){
-//                     q.offer(neighbor);
-//                 }
-//             }
-//         }
-
-//         return processed == set.size();
-
-
-//     }
-// }
-
 class Solution {
-    public boolean isPrintable(int[][] targetGrid) {
-        int m = targetGrid.length, n = targetGrid[0].length;
 
-        // Pass 1 — build all bounding boxes in one scan
-        // minR[c], maxR[c], minC[c], maxC[c] for each color c
-        int[] minR = new int[61], maxR = new int[61];
-        int[] minC = new int[61], maxC = new int[61];
-        Arrays.fill(minR, m); Arrays.fill(maxR, -1);
-        Arrays.fill(minC, n); Arrays.fill(maxC, -1);
+    public int[] findBoundary(int color , int [][]grid){
+        int minRow = grid.length + 1;
+        int maxRow = -1 ;
+        int minCol = grid[0].length +1 ;
+        int maxCol = -1;
 
-        Set<Integer> colors = new HashSet<>();
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int c = targetGrid[i][j];
-                colors.add(c);
-                minR[c] = Math.min(minR[c], i);
-                maxR[c] = Math.max(maxR[c], i);
-                minC[c] = Math.min(minC[c], j);
-                maxC[c] = Math.max(maxC[c], j);
-            }
-        }
+        for(int i = 0 ; i < grid.length ; i++){
+            for(int j = 0 ; j < grid[0].length ; j++){
+                if(grid[i][j] == color){
+                    minRow = Math.min(minRow , i);
+                    maxRow = Math.max(maxRow , i);
 
-        // Build graph + indegree
-        int[] indegree = new int[61];
-        List<Set<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < 61; i++) graph.add(new HashSet<>());
-
-        // Pass 2 — build edges in one scan
-        // For cell (i,j) with color C:
-        // any color A whose bounding box contains (i,j) must be printed before C
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int c = targetGrid[i][j];
-                for (int a : colors) {
-                    if (a != c
-                        && i >= minR[a] && i <= maxR[a]
-                        && j >= minC[a] && j <= maxC[a]) {
-                        if (!graph.get(a).contains(c)) {
-                            graph.get(a).add(c);
-                            indegree[c]++;
-                        }
-                    }
+                    minCol = Math.min(minCol , j);
+                    maxCol = Math.max(maxCol , j);
                 }
             }
         }
 
-        // Kahn's BFS — same as before
-        Queue<Integer> q = new ArrayDeque<>();
-        for (int c : colors) if (indegree[c] == 0) q.offer(c);
+        return new int[]{minRow , maxRow , minCol , maxCol};
+    }
 
-        int processed = 0;
-        while (!q.isEmpty()) {
-            int node = q.poll();
-            processed++;
-            for (int nb : graph.get(node))
-                if (--indegree[nb] == 0) q.offer(nb);
+    public boolean otherColorInBoundary(int color , int[] boundary , int[][] grid ){
+        int minRow = boundary[0];
+        int maxRow = boundary[1];
+        int minCol = boundary[2];
+        int maxCol = boundary[3];
+
+        for(int i = minRow ; i <= maxRow ; i++){
+            for(int j = minCol ; j <= maxCol ; j++){
+                if(grid[i][j] == color){
+                    return true;
+                }
+            }
         }
 
-        return processed == colors.size();
+        return false;
+
+    }
+
+
+    public boolean isPrintable(int[][] targetGrid) {
+        Set<Integer> set = new HashSet<>();
+        List<Set<Integer>> graph = new ArrayList<>();
+
+        int m = targetGrid.length;
+        int n = targetGrid[0].length;
+
+        int maxColor = 0;
+        for(int i = 0 ; i < m ; i++){
+            for(int j = 0 ; j < n ; j++){
+                set.add(targetGrid[i][j]);
+                maxColor = Math.max(maxColor , targetGrid[i][j]);
+            }
+        }
+
+        maxColor = maxColor + 1; // for 1-indexed array
+
+        int indegree[] = new int[maxColor];
+
+        for(int i = 0 ; i < maxColor ; i++){
+            graph.add(new HashSet<>());
+            indegree[i] = -1 ; // setting -1 for not real colors
+        }
+
+        for(int color : set ){
+            indegree[color] = 0; // setting 0 for real actual colors
+        }
+
+        // building Graph
+        for(int color : set){
+            // getting the boundary points for the particular color
+            int boundary[] = findBoundary(color , targetGrid);
+
+            for(int otherColor : set ){
+                if((otherColor != color) && otherColorInBoundary(otherColor , boundary , targetGrid)){
+                    if(!graph.get(color).contains(otherColor)){
+                        graph.get(color).add(otherColor);
+                        indegree[otherColor]++;
+                    }
+                }
+            }
+
+        }
+
+        // now BFS using kahns algo
+
+        Queue<Integer> q = new ArrayDeque<>();
+
+        // added starting points in the queue
+        for(int i = 0 ; i < maxColor ; i++){
+            if(indegree[i] == 0){
+                q.offer(i);
+            }
+        }
+
+        int processed = 0;
+
+        while(!q.isEmpty()){
+            int node = q.poll();
+            processed ++;
+
+            for(int neighbor : graph.get(node)){
+                if(--indegree[neighbor] == 0){
+                    q.offer(neighbor);
+                }
+            }
+        }
+
+        return processed == set.size();
+
+
     }
 }
+
