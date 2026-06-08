@@ -23,9 +23,8 @@ class Solution {
             int py = find(y);
 
             if(px == py) return false;
-
-            if(rank[px] < rank[py]) parent[px] = py;
-            else if(rank[px] > rank[py]) parent[py] = px;
+            // if(rank[px] < rank[py]) parent[px] = py;
+            // else if(rank[px] > rank[py]) parent[py] = px;
             else{
                 parent[py] = px;
                 rank[px]++;
