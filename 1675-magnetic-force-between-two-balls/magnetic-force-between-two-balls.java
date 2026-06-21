@@ -8,11 +8,11 @@ class Solution {
                 balls ++;
                 lastBallPosition = position[i];
             } 
-            if(balls >= m ){
+            if(balls == m ){ // we have places required number of balls 
                 return true;
             }
         }
-        return false;
+        return false; 
         
     }
     public int maxDistance(int[] position, int m) {
