@@ -17,7 +17,7 @@ class Solution {
     int backSum = 0;
     public TreeNode convertBST(TreeNode root) {
         if(root == null) return root;
-
+        // doing reverse Inorder traversal to get the sum from right
         convertBST(root.right);
         backSum += root.val;
         root.val = backSum;
