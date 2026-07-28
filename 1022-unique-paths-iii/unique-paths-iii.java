@@ -8,7 +8,7 @@ class Solution {
             return ;
         }
         
-        if(grid[startR][startC] == 2 && emptyCell == -1){
+        if(grid[startR][startC] == 2 && emptyCell == 0){
             count++;
             return ;
         }
@@ -27,7 +27,7 @@ class Solution {
         int n = grid[0].length;
         int startR = -1;
         int startC = -1;
-        int emptyCell = 0;
+        int emptyCell = 1; // counting the ending cell as well 
         for(int i = 0 ; i < m ; i++){
             for(int j = 0 ; j < n ; j++){
                 if(grid[i][j] == 1){
