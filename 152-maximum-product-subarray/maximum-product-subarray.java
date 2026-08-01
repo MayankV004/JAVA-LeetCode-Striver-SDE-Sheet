@@ -1,19 +1,25 @@
 class Solution {
     public int maxProduct(int[] nums) {
-        int prefix = 1 ;
-        int suffix = 1 ;
         int n = nums.length;
-        int maxProd = Integer.MIN_VALUE;
-        for(int i = 0 ; i < n ; i++)
-        {
-            if(prefix == 0 ) prefix = 1;
-            if(suffix == 0 ) suffix = 1;
+        // 2 DP states
 
-            prefix = prefix * nums[i];
-            suffix = suffix * nums[n-i-1];
+        int []minDP = new int[n];
+        int []maxDP = new int[n];
 
-            maxProd = Math.max(maxProd , Math.max(prefix , suffix));
+        int ans = nums[0];
+        minDP[0] = nums[0];
+        maxDP[0] = nums[0];
+
+        for(int i = 1 ; i < n ; i ++){
+            int current = nums[i];
+
+            minDP[i] = Math.min(current , Math.min(current * minDP[i-1] , current * maxDP[i-1]));
+            maxDP[i] = Math.max(current , Math.max(current * minDP[i-1] , current * maxDP[i-1]));
+
+            ans = Math.max(ans , maxDP[i]);
         }
-        return maxProd;
+
+        return ans;
+
     }
 }
