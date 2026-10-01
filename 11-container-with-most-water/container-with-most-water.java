@@ -1,21 +1,28 @@
 class Solution {
     public int maxArea(int[] height) {
-        int l = 0 ; int r = height.length -1 ;
 
-        if (height.length <= 1) return 0;
-        int highestWater = 0;
-        while(l < r){
-            int currheight = Math.min(height[l],height[r]);
-            int diff = r-l;
+        int left = 0;
+        int right = height.length - 1;
 
-            int currWater = currheight * diff;
-            highestWater = Math.max(highestWater , currWater);
-            System.out.println(highestWater);
-            if(height[l] <= height[r]){
-                l++;
-            } else r--;
+        int maxArea = 0;
 
+        while (left < right) {
+
+            int width = right - left;
+
+            int h = Math.min(height[left], height[right]);
+
+            int area = width * h;
+
+            maxArea = Math.max(maxArea, area);
+
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
         }
-        return highestWater;
+
+        return maxArea;
     }
 }
